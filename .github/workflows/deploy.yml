@@ -12,10 +12,13 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
-      - name: Start ssh-agent
-        uses: webfactory/ssh-agent@v0.8.1
-        with:
-          ssh-private-key: ${{ secrets.GH_CD }}
+      - name: Setup SSH key
+        run: |
+          mkdir -p ~/.ssh
+          echo "${{ secrets.GH_CD }}" > ~/.ssh/deploy_key
+          chmod 600 ~/.ssh/deploy_key
+          eval "$(ssh-agent -s)"
+          ssh-add ~/.ssh/deploy_key
 
       - name: Sync files to server
         run: |
