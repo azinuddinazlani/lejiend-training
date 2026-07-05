@@ -1,0 +1,26 @@
+name: Deploy to server
+
+on:
+  push:
+    branches: [ main ]
+  workflow_dispatch:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Start ssh-agent
+        uses: webfactory/ssh-agent@v0.8.1
+        with:
+          ssh-private-key: ${{ secrets.GH_CD }}
+
+      - name: Sync files to server
+        run: |
+          rsync -avz -e "ssh -o StrictHostKeyChecking=no" --delete --exclude='.git' --exclude='node_modules' ./ ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }}:${{ secrets.DEPLOY_DIR }}
+
+      - name: Install and start on server
+        run: |
+          ssh -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.DEPLOY_DIR }} && cd ${{ secrets.DEPLOY_DIR }} && npm install --production && nohup npm start > nohup.out 2>&1 &"
