@@ -3,7 +3,7 @@ const fs = require('fs');
 const path = require('path');
 const http = require('http');
 
-const hostname = '127.0.0.1';
+const hostname = '0.0.0.0';
 const port = process.env.PORT || 3000;
 const expectedApiKey = process.env.API_KEY;
 const usersFilePath = path.join(__dirname, 'users.json');
