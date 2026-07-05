@@ -1,0 +1,14 @@
+{
+  "name": "lejiend-training",
+  "version": "1.0.0",
+  "description": "Basic Node.js starter project",
+  "main": "index.js",
+  "scripts": {
+    "start": "node index.js",
+    "test": "node --test"
+  },
+  "license": "MIT",
+  "dependencies": {
+    "dotenv": "^17.4.2"
+  }
+}
