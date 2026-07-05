@@ -36,4 +36,4 @@ jobs:
 
       - name: Install and start on server
         run: |
-          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "mkdir -p ${{ secrets.DEPLOY_DIR }} && cd ${{ secrets.DEPLOY_DIR }} && npm install --production && nohup npm start > nohup.out 2>&1 &"
+          ssh -i ~/.ssh/deploy_key -o StrictHostKeyChecking=no ${{ secrets.SSH_USER }}@${{ secrets.SSH_HOST }} "pkill -f 'node index.js' || true && mkdir -p ${{ secrets.DEPLOY_DIR }} && cd ${{ secrets.DEPLOY_DIR }} && npm install --production && nohup npm start > nohup.out 2>&1 &"
