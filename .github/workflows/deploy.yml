@@ -12,6 +12,16 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v4
 
+      - name: Validate required secrets
+        run: |
+          set -e
+          missing=0
+          if [ -z "${{ secrets.GH_CD }}" ]; then echo "Missing secret: GH_CD"; missing=1; else echo "GH_CD set"; fi
+          if [ -z "${{ secrets.SSH_HOST }}" ]; then echo "Missing secret: SSH_HOST"; missing=1; else echo "SSH_HOST set"; fi
+          if [ -z "${{ secrets.SSH_USER }}" ]; then echo "Missing secret: SSH_USER"; missing=1; else echo "SSH_USER set"; fi
+          if [ -z "${{ secrets.DEPLOY_DIR }}" ]; then echo "Missing secret: DEPLOY_DIR"; missing=1; else echo "DEPLOY_DIR set"; fi
+          if [ "$missing" -eq 1 ]; then exit 1; fi
+
       - name: Setup SSH key
         run: |
           mkdir -p ~/.ssh
